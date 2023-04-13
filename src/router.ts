@@ -1,18 +1,9 @@
-import { Router, error, json } from "itty-router";
+import { Router } from "itty-router";
 
-const router = Router()
+export const router = Router()
 
-router
-  .get('/', () => ({ bar: 'root' }))
-  .get('/foo', () => ({ bar: 'baz' }))
-  .all('*', () => error(404))
+router.get('/', () => ({ response: 'root' }))
 
-export default {
-  portRouter: 3000,
-  fetchRouter: (request) => router
-    .handle(request)
-    .then(json)
-    .catch(error)
-}
+router.get('/todos/:id', ({ params }) => ({ response: `Todo #${params.id}` }))
 
-//TODO 
+router.all('*', () => new Response('Not Found.', { status: 404 }))
