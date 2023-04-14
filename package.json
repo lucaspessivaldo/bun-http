@@ -5,8 +5,5 @@
   "scripts": {
     "start": "bun ./src/server.ts",
     "dev:watch": "bun --hot ./src/server.ts"
-  },
-  "dependencies": {
-    "itty-router": "next"
   }
 }
