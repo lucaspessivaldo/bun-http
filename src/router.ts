@@ -1,18 +1,38 @@
-import { Router } from "itty-router";
+const routes: Route[] = [
+  {
+    path: '/',
+    method: 'GET',
+    handler: (req) => {
+      return Response.json({ message: "root" });
+    }
+  },
+  {
+    path: '/about',
+    method: 'GET',
+    handler: (req) => {
+      return Response.json({ message: "about" });
+    }
+  },
+  {
+    path: '/error',
+    method: 'GET',
+    handler: (req) => {
+      return Response.json({ message: "error" });
+    }
+  }
+];
 
-export const router = Router()
+export default function router(req: Request) {
+  const url = new URL(req.url)
+  const method = req.method
 
-router.get('/', () => ({ response: 'root' }))
+  const matchingRoute = routes.find(route => route.path === url.pathname && route.method === method);
 
-router.get('/todos/:id', ({ params }) => ({ response: `Todo #${params.id}` }))
-
-router.get('/user', () => {
-  return { response: 'user' }
-})
-
-router.post('/user', (request) => {
-  const user = request
-  return { response: user }
-})
-
-router.all('*', () => new Response('Not Found.', { status: 404 }))
+  if (matchingRoute) {
+    return matchingRoute.handler(req);
+  } else {
+    return Response.json({
+      message: "404 Not Found"
+    });
+  }
+}
